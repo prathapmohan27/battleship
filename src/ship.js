@@ -1,6 +1,10 @@
 function ship(name, length) {
   function hit(currentPos) {
-    if (this.position.includes(currentPos)) {
+    if (
+      // eslint-disable-next-line operator-linebreak
+      this.position.includes(currentPos) &&
+      !this.result.includes(currentPos)
+    ) {
       this.result.push(currentPos);
       return true;
     }

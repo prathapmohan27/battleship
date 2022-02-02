@@ -52,29 +52,22 @@ function gameBoard(name) {
 
   function placeShip() {
     this.ships.forEach((obj) => {
-      // eslint-disable-next-line no-console
-      console.log(obj);
       if (obj.position.length === 0) {
         const index = getStart();
         const result = randomPlace.bind(this);
         result(obj, index);
       }
     });
+    const check = this.ships.every((obj) => obj.position.length !== 0);
+    if (check) {
+      return true;
+    }
+    return false;
   }
 
-  // function shipSunk(arr) {
-  //   for (let i = 0; i < 5; i += 1) {
-  //     if (arr[i].isSunk(arr[i]) && arr[i].sunk) return true;
-  //   }
-  //   return false;
-  // }
-
-  // function shipHit(obj, index) {
-  //   for (let i = 0; i < 5; i += 1) {
-  //     if (obj.ships[i].hit(obj.ships[i], index)) return true;
-  //   }
-  //   return false;
-  // }
+  function allShipSunk() {
+    return this.ships.every((obj) => obj.sunk);
+  }
 
   function display(shipName) {
     // eslint-disable-next-line no-console
@@ -83,26 +76,42 @@ function gameBoard(name) {
 
   function whichShip(pos) {
     this.ships.forEach((obj) => {
-      obj.hit(pos);
-      if (obj.isSunk()) {
-        // eslint-disable-next-line no-param-reassign
-        obj.sunk = true;
-        display(obj.name);
+      if (obj.hit(pos)) {
+        if (obj.isSunk()) {
+          // eslint-disable-next-line no-param-reassign
+          obj.sunk = true;
+          this.allShipSunk();
+          display(obj.name);
+        }
       }
     });
   }
 
+  function hitShip() {
+    // eslint-disable-next-line no-console
+    console.log('X');
+  }
+
+  function markMiss() {
+    // eslint-disable-next-line no-console
+    console.log('*');
+  }
+
   function receiveAttack(x, y) {
     const currentPosition = gridArray[x][y];
-    // eslint-disable-next-line no-console
-    console.log(currentPosition);
-
-    if (!this.markedAttack.includes(currentPosition)) {
-      this.markedAttack.push(currentPosition);
+    if (
+      // eslint-disable-next-line operator-linebreak
+      !this.shipAttackArray.includes(currentPosition) &&
+      !this.missedArray.includes(currentPosition)
+    ) {
       if (this.filledPosition.includes(currentPosition)) {
+        this.shipAttackArray.push(currentPosition);
+        this.hitShip();
         this.whichShip(currentPosition);
         return true;
       }
+      this.missedArray.push(currentPosition);
+      this.markMiss();
     }
     return false;
   }
@@ -110,13 +119,15 @@ function gameBoard(name) {
   return {
     name,
     ships,
-    markedAttack: [],
     filledPosition: [],
+    shipAttackArray: [],
+    missedArray: [],
     receiveAttack,
-    // shipSunk,
-    // shipHit,
     placeShip,
     whichShip,
+    hitShip,
+    markMiss,
+    allShipSunk,
   };
 }
 
