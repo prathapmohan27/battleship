@@ -1,3 +1,7 @@
+/* eslint-disable operator-linebreak */
+/* eslint-disable function-paren-newline */
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable comma-dangle */
 const ship = require('./ship');
 
 function gameBoard(name) {
@@ -7,24 +11,53 @@ function gameBoard(name) {
   const submarine = ship('submarine', 3);
   const destroyer = ship('destroyer', 2);
   const ships = [carrier, battleship, cruiser, submarine, destroyer];
-  const gridArray = [];
+  let horizontalArray = [];
+  let verticalArray = [];
 
-  function gridValue() {
+  // it's create horizontal 2x2 matrix
+  function horizontalValue() {
+    const arr = [];
     let start = 0;
     for (let i = 0; i < 10; i += 1) {
-      gridArray[i] = [];
+      arr[i] = [];
       for (let j = 0; j < 10; j += 1) {
-        gridArray[i][j] = start;
+        arr[i][j] = start;
         start += 1;
       }
     }
+    return arr;
   }
-  gridValue();
+  // it's create vertical 2x2 matrix
+  function verticalValue() {
+    const arr = [];
 
-  function generatePosition(n, index) {
+    for (let i = 0; i < 10; i += 1) {
+      arr[i] = [];
+      let start = i;
+      for (let j = 0; j < 10; j += 1) {
+        arr[i][j] = start;
+        start += 10;
+      }
+    }
+    return arr;
+  }
+  horizontalArray = horizontalValue();
+  verticalArray = verticalValue();
+
+  // it's generate position
+  function generateHorizontalPosition(n, index) {
     const temp = [];
     for (let i = 0; i < n; i += 1) {
       temp.push(index + i);
+    }
+    return temp;
+  }
+  function generateVerticalPosition(n, index) {
+    const temp = [];
+    let pos = index;
+    for (let i = 0; i < n; i += 1) {
+      temp.push(pos);
+      pos += 10;
     }
     return temp;
   }
@@ -32,13 +65,33 @@ function gameBoard(name) {
   function getStart() {
     return Math.floor(Math.random() * 99);
   }
-
-  function randomPlace(obj, index) {
+  // it's place ship vertical
+  function placeVertical(obj, index) {
     const temp = [];
     if (!this.filledPosition.includes(index)) {
-      temp.push(...generatePosition(obj.length, index));
+      temp.push(...generateVerticalPosition(obj.length, index));
       const isTake = this.filledPosition.some((x) => temp.includes(x));
-      const isOut = gridArray.some((arr) => temp.every((v) => arr.includes(v)));
+      const isOut = verticalArray.some((arr) =>
+        temp.every((v) => arr.includes(v))
+      );
+      if (!isOut) {
+        this.placeShip();
+      }
+      if (!isTake && isOut) {
+        this.filledPosition.push(...temp);
+        obj.position.push(...temp);
+      }
+    }
+    this.placeShip();
+  }
+  function placeHorizontal(obj, index) {
+    const temp = [];
+    if (!this.filledPosition.includes(index)) {
+      temp.push(...generateHorizontalPosition(obj.length, index));
+      const isTake = this.filledPosition.some((x) => temp.includes(x));
+      const isOut = horizontalArray.some((arr) =>
+        temp.every((v) => arr.includes(v))
+      );
       if (!isOut) {
         this.placeShip();
       }
@@ -50,21 +103,30 @@ function gameBoard(name) {
     this.placeShip();
   }
 
+  // place the ship randomly
   function placeShip() {
     this.ships.forEach((obj) => {
       if (obj.position.length === 0) {
         const index = getStart();
-        const result = randomPlace.bind(this);
-        result(obj, index);
+        const d = this.direction[Math.floor(Math.random() * 2)];
+        if (d === 'vertical') {
+          const result = placeVertical.bind(this);
+          result(obj, index);
+        } else {
+          const result = placeHorizontal.bind(this);
+          result(obj, index);
+        }
       }
     });
+    // eslint-disable-next-line no-console
+    console.log(this);
     const check = this.ships.every((obj) => obj.position.length !== 0);
     if (check) {
       return true;
     }
     return false;
   }
-
+  // check all ship is sunk
   function allShipSunk() {
     return this.ships.every((obj) => obj.sunk);
   }
@@ -74,13 +136,13 @@ function gameBoard(name) {
     console.log(shipName);
   }
 
+  // check which ship hit
   function whichShip(pos) {
     this.ships.forEach((obj) => {
       if (obj.hit(pos)) {
         if (obj.isSunk()) {
           // eslint-disable-next-line no-param-reassign
           obj.sunk = true;
-          this.allShipSunk();
           display(obj.name);
         }
       }
@@ -97,10 +159,8 @@ function gameBoard(name) {
     console.log('*');
   }
 
-  function receiveAttack(x, y) {
-    const currentPosition = gridArray[x][y];
+  function receiveAttack(currentPosition) {
     if (
-      // eslint-disable-next-line operator-linebreak
       !this.shipAttackArray.includes(currentPosition) &&
       !this.missedArray.includes(currentPosition)
     ) {
@@ -112,6 +172,7 @@ function gameBoard(name) {
       }
       this.missedArray.push(currentPosition);
       this.markMiss();
+      return true;
     }
     return false;
   }
@@ -122,6 +183,7 @@ function gameBoard(name) {
     filledPosition: [],
     shipAttackArray: [],
     missedArray: [],
+    direction: ['horizontal', 'vertical'],
     receiveAttack,
     placeShip,
     whichShip,
