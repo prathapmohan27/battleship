@@ -1,0 +1,44 @@
+body,
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+.gameContainer {
+  display: flex;
+  justify-content: space-around;
+  margin: 50px;
+}
+.board {
+  padding: 0;
+  width: 20rem;
+  height: 20rem;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+}
+
+.cell {
+  margin: 0 -1px -1px 0;
+  border: 0.1rem solid;
+}
+
+.player > div {
+  pointer-events: none;
+}
+.player {
+  /* display: none; */
+  cursor: not-allowed;
+}
+
+.active {
+  background-color: rgba(18, 93, 136, 0.3);
+}
+.hit {
+  background-color: red;
+}
+.miss {
+  background-color: blueviolet;
+}
