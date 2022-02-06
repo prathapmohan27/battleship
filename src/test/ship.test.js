@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-const ship = require('./ship');
+const ship = require('../ship');
 
 test('check if object creation work', () => {
   const carrier = ship('carrier', 5);

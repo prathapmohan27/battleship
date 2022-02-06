@@ -118,8 +118,6 @@ function gameBoard(name) {
         }
       }
     });
-    // eslint-disable-next-line no-console
-    console.log(this);
     const check = this.ships.every((obj) => obj.position.length !== 0);
     if (check) {
       return true;
@@ -128,7 +126,10 @@ function gameBoard(name) {
   }
   // check all ship is sunk
   function allShipSunk() {
-    return this.ships.every((obj) => obj.sunk);
+    const temp = this.filledPosition.every((ele) =>
+      this.shipAttackArray.includes(ele)
+    );
+    return temp;
   }
 
   function display(shipName) {
@@ -149,16 +150,6 @@ function gameBoard(name) {
     });
   }
 
-  function hitShip() {
-    // eslint-disable-next-line no-console
-    console.log('X');
-  }
-
-  function markMiss() {
-    // eslint-disable-next-line no-console
-    console.log('*');
-  }
-
   function receiveAttack(currentPosition) {
     if (
       !this.shipAttackArray.includes(currentPosition) &&
@@ -166,12 +157,10 @@ function gameBoard(name) {
     ) {
       if (this.filledPosition.includes(currentPosition)) {
         this.shipAttackArray.push(currentPosition);
-        this.hitShip();
         this.whichShip(currentPosition);
         return true;
       }
       this.missedArray.push(currentPosition);
-      this.markMiss();
       return true;
     }
     return false;
@@ -187,8 +176,6 @@ function gameBoard(name) {
     receiveAttack,
     placeShip,
     whichShip,
-    hitShip,
-    markMiss,
     allShipSunk,
   };
 }

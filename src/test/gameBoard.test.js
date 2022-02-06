@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-const gameBoard = require('./gameBoard');
+const gameBoard = require('../gameBoard');
 
 test('check place ship function', () => {
   const player = gameBoard('p2');

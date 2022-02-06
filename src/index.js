@@ -1,6 +1,10 @@
-function sum(a, b) {
-  return a + b;
-}
+const gameLoop = require('./gameLoop');
+const makeGrid = require('./makeGrid');
 
-// module.exports = sum;
-export default sum;
+(() => {
+  const gameContainer = document.querySelector('.gameContainer');
+  gameContainer.append(makeGrid.createBoard('player', 'playerCell'));
+  gameContainer.append(makeGrid.createBoard('computer', 'computerCell'));
+  gameLoop.showShip();
+  gameLoop.getData();
+})();
