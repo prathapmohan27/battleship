@@ -119,9 +119,6 @@ const gameLoop = (() => {
 
   function showShip() {
     person.filledPosition.forEach((v) => personCell[v].classList.add('active'));
-    computer.filledPosition.forEach((v) =>
-      computerCell[v].classList.add('active')
-    );
   }
 
   function removeClass(cell) {
