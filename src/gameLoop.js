@@ -8,10 +8,13 @@ const player = require('./player');
 
 const gameLoop = (() => {
   let turn = true;
-  const person = gameBoard('player');
-  const computer = gameBoard('computer');
+  const person = gameBoard('Player');
+  const computer = gameBoard('Computer');
   person.placeShip();
   computer.placeShip();
+  const result = document.querySelector('.result');
+  const personSunk = [];
+  const computerSunk = [];
 
   let computerCell;
   let personCell;
@@ -23,6 +26,40 @@ const gameLoop = (() => {
     obj.missedArray.forEach((v) => list[v].classList.add('miss'));
   }
 
+  function display(sen) {
+    result.textContent = sen;
+  }
+
+  function finalResult() {
+    if (computer.allShipSunk()) {
+      display(`${person.name} Won!`);
+    }
+    if (person.allShipSunk()) {
+      display(`${computer.name} Won!`);
+    }
+  }
+
+  function getShip(obj) {
+    obj.ships.forEach((sub) => {
+      if (obj.name === 'Computer') {
+        if (sub.sunk) {
+          if (!computerSunk.includes(sub.name)) {
+            computerSunk.push(sub.name);
+            display(`${computer.name} ${sub.name} was sunk`);
+          }
+        }
+      }
+      if (obj.name === 'Player') {
+        if (sub.sunk) {
+          if (!personSunk.includes(sub.name)) {
+            personSunk.push(sub.name);
+            display(`${person.name} ${sub.name} was sunk`);
+          }
+        }
+      }
+    });
+  }
+
   function startAttack(pos) {
     if (!computer.allShipSunk() && !person.allShipSunk()) {
       if (turn) {
@@ -30,20 +67,25 @@ const gameLoop = (() => {
         if (turn) {
           return;
         }
+        display(`${computer.name} Turn!`);
         showShipHit(computer, computerCell);
         showShipMiss(computer, computerCell);
+        getShip(computer);
       }
-      if (!turn) {
-        turn = player.aiTurn(person);
-        while (!turn) {
+      setTimeout(() => {
+        if (!turn) {
           turn = player.aiTurn(person);
+          while (!turn) {
+            turn = player.aiTurn(person);
+          }
+          getShip(person);
+          display(`${person.name} Turn!`);
           showShipHit(person, personCell);
           showShipMiss(person, personCell);
         }
-        showShipHit(person, personCell);
-        showShipMiss(person, personCell);
-      }
+      }, 1000);
     }
+    finalResult();
   }
 
   function getData() {
@@ -65,6 +107,8 @@ const gameLoop = (() => {
   }
 
   return {
+    showShipHit,
+    showShipMiss,
     getData,
     showShip,
   };

@@ -132,11 +132,6 @@ function gameBoard(name) {
     return temp;
   }
 
-  function display(shipName) {
-    // eslint-disable-next-line no-console
-    console.log(shipName);
-  }
-
   // check which ship hit
   function whichShip(pos) {
     this.ships.forEach((obj) => {
@@ -144,7 +139,6 @@ function gameBoard(name) {
         if (obj.isSunk()) {
           // eslint-disable-next-line no-param-reassign
           obj.sunk = true;
-          display(obj.name);
         }
       }
     });
