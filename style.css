@@ -6,6 +6,32 @@ p {
   margin: 0;
 }
 
+body {
+  background-color: #5292ad;
+}
+
+.header {
+  padding: 2rem;
+  background-color: #ad5292;
+  color: #97bece;
+  font-size: 1.5rem;
+}
+
+.result {
+  width: min(500px, 90%);
+  text-align: center;
+  padding: 1rem;
+  font-size: 1.5rem;
+  background-color: #5264ad;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 0.5rem;
+  color: white;
+  border-radius: 0.5rem;
+  font-weight: 400;
+  box-shadow: 0.3rem 0.3rem 0.3rem #141414;
+}
+
 .gameContainer {
   display: flex;
   justify-content: space-around;
@@ -34,11 +60,11 @@ p {
 }
 
 .active {
-  background-color: rgba(18, 93, 136, 0.3);
+  background-color: #5264ad;
 }
 .hit {
-  background-color: red;
+  background-color: #e51a1e;
 }
 .miss {
-  background-color: blueviolet;
+  background-color: #1ae5e1;
 }
