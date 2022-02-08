@@ -23,15 +23,35 @@ body {
   padding: 1rem;
   font-size: 1.5rem;
   background-color: #5264ad;
-  margin-right: auto;
-  margin-left: auto;
   margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
   color: white;
   border-radius: 0.5rem;
   font-weight: 400;
   box-shadow: 0.3rem 0.3rem 0.3rem #141414;
 }
+.center {
+  margin-right: auto;
+  margin-left: auto;
+}
 
+.buttons {
+  width: min(400px, 90%);
+  display: flex;
+  justify-content: space-around;
+}
+.buttons > button {
+  border: none;
+  outline: none;
+  padding: 0.5rem;
+  background-color: transparent;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: 900;
+}
+.btn {
+  letter-spacing: 0.4rem;
+}
 .gameContainer {
   display: flex;
   justify-content: space-around;
@@ -55,16 +75,31 @@ body {
   pointer-events: none;
 }
 .player {
-  /* display: none; */
   cursor: not-allowed;
 }
 
 .active {
   background-color: #5264ad;
+  border-radius: 0.4rem;
+  box-shadow: 0 0 0.2rem 0.1rem #141414;
 }
 .hit {
   background-color: #e51a1e;
 }
 .miss {
   background-color: #1ae5e1;
+}
+.invisible {
+  display: none;
+}
+
+@media only screen and (max-width: 40rem) {
+  .gameContainer {
+    flex-direction: column;
+  }
+  .board {
+    width: 18rem;
+    height: 18rem;
+    margin-bottom: 1rem;
+  }
 }

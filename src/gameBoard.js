@@ -8,8 +8,8 @@ function gameBoard(name) {
   const carrier = ship('carrier', 5);
   const battleship = ship('battleship ', 4);
   const cruiser = ship('cruiser', 3);
-  const submarine = ship('submarine', 3);
-  const destroyer = ship('destroyer', 2);
+  const submarine = ship('submarine', 2);
+  const destroyer = ship('destroyer', 1);
   const ships = [carrier, battleship, cruiser, submarine, destroyer];
   let horizontalArray = [];
   let verticalArray = [];

@@ -5,6 +5,5 @@ const makeGrid = require('./makeGrid');
   const gameContainer = document.querySelector('.gameContainer');
   gameContainer.append(makeGrid.createBoard('player', 'playerCell'));
   gameContainer.append(makeGrid.createBoard('computer', 'computerCell'));
-  gameLoop.showShip();
-  gameLoop.getData();
+  gameLoop.main();
 })();
